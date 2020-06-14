@@ -1,12 +1,12 @@
 var fs = require('fs')
-var student = require('./student.js')
+var Student = require('./student.js')
 var express = require('express')
 //创建一个路由容器
 var router = express.Router()
 //把路由都挂载到router路由容器中
 router.get('/students', function (req, res) {
 
-    student.findAll(function (err, students) {
+    Student.find(function (err, students) {
         if (err) {
             return res.status(500).send('Server')
         }
@@ -28,19 +28,20 @@ router.get('/students/new', function (req, res) {
 
 
 })
+//新增学生
 router.post('/students/new', function (req, res) {
-    student.save(req.body, function (err) {
-        if (err) {
-            return res.status(500).send('server error.')
-        }
-        res.redirect('/students')
-    })
+   new Student(req.body).save(function (err) {
+    if (err) {
+        return res.status(500).send('server error.')
+    }
+    res.redirect('/students')
+})
 
 
 
 })
 router.get('/students/edit', function (req, res) {
-    student.findById(parseInt(req.query.id), function (err, student) {
+    Student.findById(req.query.id.replace(/"/g,''), function (err, student) {
         if (err) {
             return res.status(500).send('server error.')
         }
@@ -50,7 +51,8 @@ router.get('/students/edit', function (req, res) {
     })
 })
 router.post('/students/edit', function (req, res) {
-    student.updateById(req.body, function (err, student) {
+    var id =req.body.id.replace(/"/g,'')
+    Student.findByIdAndUpdate(id,req.body, function (err, student) {
         if (err) {
             return res.status(500).send('server error.')
         }
@@ -58,7 +60,8 @@ router.post('/students/edit', function (req, res) {
     })
 })
 router.get('/students/delete', function (req, res) {
-    student.deleteById(parseInt(req.query.id), function (err, student) {
+    var id = req.query.id.replace(/"/g,'')
+    Student.findByIdAndRemove(id, function (err, student) {
         if (err) {
             return res.status(500).send('server error.')
         }

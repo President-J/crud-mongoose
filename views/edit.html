@@ -52,7 +52,7 @@
         <h2 class="sub-header">编辑学生</h2>
         <form action="/students/edit" method="post">
             <!-- 隐藏表单域，用来提交不被用户看到，但需要提交的数据 -->
-            <input type="hidden" value="{{student.id}}" name="id">
+            <input type="hidden" value="{{student._id}}" name="id">
             <div class="form-group">
                 <label for="exampleInputEmail1">姓名</label>
                 <input type="text" value="{{student.name}}" class="form-control" id="exampleInputEmail1" name="name"
